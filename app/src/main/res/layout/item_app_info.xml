@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <import type="android.text.TextUtils" />
+
+        <variable
+            name="appInfo"
+            type="com.ditta.apptracker.model.AppInfoUi" />
+
+        <variable
+            name="itemListener"
+            type="com.ditta.apptracker.ui.adapter.ItemListener" />
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_10_dp"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="4dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingHorizontal="@dimen/margin_10_dp">
+
+            <ImageView
+                android:id="@+id/app_icon"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="@dimen/margin_10_dp"
+                android:contentDescription="@null"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_app_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_10_dp"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:text="@{appInfo.packageName}"
+                android:textColor="@color/black"
+                android:textSize="@dimen/font_14_sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/app_icon"
+                tools:text="com.test.ntk" />
+
+            <LinearLayout
+                android:id="@+id/container_status"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_10_dp"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_app_name">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/margin_10_dp"
+                    android:text="@string/staus"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/font_14_sp"
+                    android:textStyle="normal" />
+
+                <TextView
+                    android:id="@+id/tv_app_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{appInfo.isInstalled ? @string/installed : @string/uninstalled}"
+                    android:textAllCaps="true"
+                    android:textColor="@{appInfo.isInstalled ? @color/green : @color/red}"
+                    android:textSize="@dimen/font_14_sp"
+                    android:textStyle="bold"
+                    tools:text="INSTALLED" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/container_opened_datetime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_10_dp"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/container_status">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/margin_10_dp"
+                    android:text="@string/opened_date_time"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/font_14_sp"
+                    android:textStyle="normal" />
+
+                <TextView
+                    android:id="@+id/tv_opened_datetime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text='@{TextUtils.isEmpty(appInfo.startDateAsString) ? "-" : appInfo.startDateAsString}'
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/font_14_sp"
+                    android:textStyle="bold"
+                    tools:text="14/11/1990 18:30" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/container_closed_datetime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_10_dp"
+                android:layout_marginBottom="@dimen/margin_10_dp"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toTopOf="@+id/container_monitora"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/container_opened_datetime">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/margin_10_dp"
+                    android:text="@string/closed_date_time"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/font_14_sp"
+                    android:textStyle="normal" />
+
+                <TextView
+                    android:id="@+id/tv_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text='@{TextUtils.isEmpty(appInfo.endDateAsString) ? "-" : appInfo.endDateAsString}'
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/font_14_sp"
+                    android:textStyle="bold"
+                    tools:text="14/11/1990 18:30" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/container_monitora"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_10_dp"
+                android:layout_marginBottom="@dimen/margin_10_dp"
+                android:orientation="horizontal"
+                android:visibility="@{appInfo.isInstalled ? View.VISIBLE : View.GONE}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/margin_10_dp"
+                    android:ellipsize="end"
+                    android:maxLines="2"
+                    android:text="@string/to_track"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/font_14_sp"
+                    android:textStyle="normal" />
+
+                <CheckBox
+                    android:id="@+id/checkBox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="@{appInfo.toTrack}"
+                    android:onCheckedChanged="@{(v, checked) -> itemListener.onCheckedChanged(appInfo,checked)}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </com.google.android.material.card.MaterialCardView>
+
+</layout>

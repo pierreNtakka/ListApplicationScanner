@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">App Tracker</string>
+    <string name="search">Search</string>
+    <string name="start_track">Track</string>
+    <string name="stop_track">Stop track</string>
+    <string name="uninstalled">uninstalled</string>
+    <string name="installed">installed</string>
+    <string name="refresh">Sync</string>
+    <string name="opened_date_time">Ora Apertura:</string>
+    <string name="closed_date_time">Ora Chiusura:</string>
+    <string name="clear_all">Clear all</string>
+    <string name="staus">Staus:</string>
+    <string name="to_track">Monitora:</string>
+    <string name="explanation_access_to_appusage_is_not_enabled">Impossibile recuperare l\'utilizzo delle statistice.E\' necessario abilitare l\'accesso  per questa app tramite Impostazioni > Sicurezza > App con accesso all\'utilizzo</string>
+    <string name="attention">Attenzione!</string>
+    <string name="ok">OK</string>
+</resources>
