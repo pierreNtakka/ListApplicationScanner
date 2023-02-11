@@ -15,7 +15,7 @@ class DataStoreRepositoryImpl(
         private const val INSTALLED_APP_KEY = "INSTALLED_APP_KEY"
         private const val APP_INSTALLATION_MILLISEC = "APP_INSTALLATION_MILLISEC"
     }
-    
+
     override fun store(list: List<AppInfoUi>) {
         sharedPreferences.edit()
             .putString(INSTALLED_APP_KEY, gson.toJson(list))
@@ -30,7 +30,7 @@ class DataStoreRepositoryImpl(
 
             gson.fromJson(read, listOfMyClassObject)
         } else {
-            ArrayList()
+            emptyList()
         }
     }
 

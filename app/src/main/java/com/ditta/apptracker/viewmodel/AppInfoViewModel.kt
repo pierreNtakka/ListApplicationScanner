@@ -22,7 +22,7 @@ class AppInfoViewModel(
     val requestPermission: LiveData<Boolean> = _requestPermissionPermission
 
     fun updateUI() {
-        val listRetrievedFromDevice = appInstalledRepository.getApplicationInfo()
+        val listRetrievedFromDevice = appInstalledRepository.getPackages()
         val listRetrievedFromDatastore = dataStoreRepository.read()
         val list = listRetrievedFromDatastore.toMutableList()
 

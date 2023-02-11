@@ -48,7 +48,7 @@ class AppInfoAdapter(
                     .getApplicationIcon(appInfo.packageName)
                 binding.appIcon.setImageDrawable(appIcon)
                 binding.appIcon.visibility = View.VISIBLE
-            } catch (e: PackageManager.NameNotFoundException) {
+            } catch (_: PackageManager.NameNotFoundException) {
             }
             binding.appInfo = appInfo
             binding.itemListener = itemListener
@@ -78,7 +78,7 @@ class AppInfoAdapter(
 
             override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
                 appInfosFiltered = if (results?.values == null)
-                    appInfos as ArrayList<AppInfoUi>
+                    appInfos.toMutableList()
                 else
                     results.values as ArrayList<AppInfoUi>
 
