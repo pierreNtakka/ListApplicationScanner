@@ -9,8 +9,8 @@ import com.ditta.apptracker.datastore.DataStoreRepositoryImpl
 import com.ditta.apptracker.datastore.UserStatistics
 import com.ditta.apptracker.datastore.UserStatisticsImpl
 import com.ditta.apptracker.viewmodel.AppInfoViewModel
-import com.ditta.tracker.RetrieverAndroidAppInfo
-import com.ditta.tracker.communication.InstalledAppRepository
+import com.ditta.apptracker.datastore.InstalledAppRepositoryImpl
+import com.ditta.apptracker.datastore.InstalledAppRepository
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -39,7 +39,7 @@ val repositoryModule = module {
     }
 
     single<InstalledAppRepository> {
-        RetrieverAndroidAppInfo(androidApplication())
+        InstalledAppRepositoryImpl(androidApplication())
     }
 
     single<UserStatistics> {

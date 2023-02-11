@@ -4,9 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.ditta.apptracker.datastore.DataStoreRepository
+import com.ditta.apptracker.datastore.InstalledAppRepository
 import com.ditta.apptracker.datastore.UserStatistics
 import com.ditta.apptracker.model.AppInfoUi
-import com.ditta.tracker.communication.InstalledAppRepository
 import java.util.*
 
 class AppInfoViewModel(
@@ -29,7 +29,7 @@ class AppInfoViewModel(
         if (listRetrievedFromDatastore.isEmpty()) {
 
             listRetrievedFromDevice.forEach {
-                list.add(AppInfoUi(it.packageName, false))
+                list.add(AppInfoUi(it, false))
             }
 
         } else if (listRetrievedFromDatastore.size > listRetrievedFromDevice.size) {
@@ -37,7 +37,7 @@ class AppInfoViewModel(
             list.forEach { appInfoUI ->
 
                 val element = listRetrievedFromDevice.firstOrNull {
-                    it.packageName == appInfoUI.packageName
+                    it == appInfoUI.packageName
                 }
 
                 if (element == null) {
@@ -49,11 +49,11 @@ class AppInfoViewModel(
         } else {
             listRetrievedFromDevice.forEach { appInfo ->
                 val element = listRetrievedFromDatastore.firstOrNull {
-                    it.packageName == appInfo.packageName
+                    it.packageName == appInfo
                 }
 
                 if (element == null) {
-                    list.add(AppInfoUi(appInfo.packageName, false))
+                    list.add(AppInfoUi(appInfo, false))
                 }
             }
         }

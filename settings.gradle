@@ -14,4 +14,3 @@ dependencyResolutionManagement {
 }
 rootProject.name = "ListApplicationScanner"
 include ':app'
-include ':tracker'

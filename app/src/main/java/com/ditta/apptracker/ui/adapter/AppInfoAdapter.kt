@@ -61,7 +61,7 @@ class AppInfoAdapter(
                 val charSearch = constraint.toString()
 
                 appInfosFiltered = if (charSearch.isEmpty()) {
-                    appInfos as MutableList<AppInfoUi>
+                    appInfos.toMutableList()
                 } else {
                     val filteredList = ArrayList<AppInfoUi>()
                     appInfos
