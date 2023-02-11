@@ -1,21 +1,15 @@
 package com.ditta.apptracker.model
 
-import com.ditta.apptracker.datastore.GsonProvider
 import com.ditta.apptracker.utils.DateUtils
 import java.util.*
 
-data class AppInfoUi(
+class AppInfoUi(
     val packageName: String,
     var toTrack: Boolean,
     var isInstalled: Boolean? = true,
     var startDate: Date? = null,
     var endDate: Date? = null
 ) {
-
-    companion object {
-        fun fromJson(json: String): AppInfoUi =
-            GsonProvider.gson.fromJson(json, AppInfoUi::class.java)
-    }
 
     val startDateAsString: String
         get() {
@@ -30,8 +24,6 @@ data class AppInfoUi(
                 DateUtils.formatDate(endDate, DateUtils.DATE_FORMAT_ITALIAN_OUTPUT)
             } ?: ""
         }
-
-    fun toJson(): String = GsonProvider.gson.toJson(this)
 }
 
 

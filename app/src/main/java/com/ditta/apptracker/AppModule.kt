@@ -11,6 +11,7 @@ import com.ditta.apptracker.datastore.UserStatisticsImpl
 import com.ditta.apptracker.viewmodel.AppInfoViewModel
 import com.ditta.tracker.RetrieverAndroidAppInfo
 import com.ditta.tracker.communication.InstalledAppRepository
+import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import org.koin.android.ext.koin.androidApplication
@@ -23,7 +24,10 @@ val koinQualifierGson = named("GSON")
 
 val repositoryModule = module {
     single<Gson>(koinQualifierGson) {
-        GsonBuilder().create()
+        GsonBuilder()
+            .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+            .setDateFormat("dd-MM-yyyy HH:mm:ss")
+            .create()
     }
 
     single {

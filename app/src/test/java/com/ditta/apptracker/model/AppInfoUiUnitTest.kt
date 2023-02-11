@@ -1,15 +1,30 @@
 package com.ditta.apptracker.model
 
+import com.ditta.apptracker.appModule
+import com.ditta.apptracker.koinQualifierGson
+import com.google.gson.Gson
 import org.junit.Assert.*
+import org.junit.Rule
 import org.junit.Test
+import org.koin.test.KoinTest
+import org.koin.test.KoinTestRule
+import org.koin.test.inject
 
-class AppInfoUiUnitTest {
+class AppInfoUiUnitTest : KoinTest {
 
+    private val gson by inject<Gson>(qualifier = koinQualifierGson)
+
+    @get:Rule
+    val koinTestRule = KoinTestRule.create {
+        printLogger()
+        modules(appModule)
+    }
+    
     @Test
     fun toJson() {
         val expectedJson =
             "{\"package_name\":\"com.ditta.apptracker\",\"to_track\":true,\"is_installed\":true}"
-        val jsonString = AppInfoUi("com.ditta.apptracker", true).toJson()
+        val jsonString = gson.toJson(AppInfoUi("com.ditta.apptracker", true))
         assertEquals(expectedJson, jsonString)
     }
 
@@ -18,7 +33,7 @@ class AppInfoUiUnitTest {
         val sourceJson =
             "{\"package_name\":\"com.ditta.apptracker\",\"to_track\":true,\"is_installed\":true}"
 
-        val appInfoUi = AppInfoUi.fromJson(sourceJson)
+        val appInfoUi = gson.fromJson(sourceJson, AppInfoUi::class.java)
         assertEquals(appInfoUi.packageName, "com.ditta.apptracker")
         assertTrue(appInfoUi.toTrack)
 

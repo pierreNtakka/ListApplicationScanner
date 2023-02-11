@@ -18,7 +18,7 @@ class DataStoreRepositoryImpl(
     
     override fun store(list: List<AppInfoUi>) {
         sharedPreferences.edit()
-            .putString(INSTALLED_APP_KEY, GsonProvider.gson.toJson(list))
+            .putString(INSTALLED_APP_KEY, gson.toJson(list))
             .apply()
     }
 
