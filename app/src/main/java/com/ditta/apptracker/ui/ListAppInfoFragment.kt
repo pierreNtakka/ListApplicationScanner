@@ -7,31 +7,21 @@ import android.view.*
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import com.ditta.apptracker.R
 import com.ditta.apptracker.databinding.ListAppInfoFragmentBinding
-import com.ditta.apptracker.datastore.InfoStatsManager
-import com.ditta.apptracker.datastore.SharedPrefRepository
 import com.ditta.apptracker.ui.adapter.AppInfoAdapter
 import com.ditta.apptracker.ui.adapter.ItemListener
 import com.ditta.apptracker.utils.ViewUtils
 import com.ditta.apptracker.viewmodel.AppInfoViewModel
-import com.ditta.apptracker.viewmodel.AppInfoViewModelFactory
-import com.ditta.tracker.RetrieverAndroidAppInfo
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ListAppInfoFragment : Fragment(), MenuProvider {
 
     private var _binding: ListAppInfoFragmentBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: AppInfoViewModel by viewModels {
-        AppInfoViewModelFactory(
-            RetrieverAndroidAppInfo(requireContext()),
-            SharedPrefRepository(requireContext()),
-            InfoStatsManager(requireActivity())
-        )
-    }
+    private val viewModel: AppInfoViewModel by viewModel()
 
     private val itemListener: ItemListener = ItemListener { appInfoUI ->
         viewModel.onItemAppChecked(appInfoUI)

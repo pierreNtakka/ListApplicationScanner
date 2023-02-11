@@ -32,6 +32,11 @@ data class AppInfoUi(
         }
 
     fun toJson(): String = GsonProvider.gson.toJson(this)
-
-
 }
+
+
+data class UserStatsDataModel(
+    val packageName: String,
+    val firstTimeStamp: Long,
+    val lastTimeStamp: Long
+)

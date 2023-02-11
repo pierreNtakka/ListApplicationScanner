@@ -3,17 +3,16 @@ package com.ditta.apptracker.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import com.ditta.apptracker.datastore.InfoStatsManager
-import com.ditta.apptracker.datastore.SharedPrefRepository
+import com.ditta.apptracker.datastore.DataStoreRepository
+import com.ditta.apptracker.datastore.UserStatistics
 import com.ditta.apptracker.model.AppInfoUi
-import com.ditta.tracker.communication.InstalledAppInterface
+import com.ditta.tracker.communication.InstalledAppRepository
 import java.util.*
 
 class AppInfoViewModel(
-    private val appInstalledRepository: InstalledAppInterface,
-    private val sharedPrefRepository: SharedPrefRepository,
-    private val infoStatsManager: InfoStatsManager,
+    private val appInstalledRepository: InstalledAppRepository,
+    private val dataStoreRepository: DataStoreRepository,
+    private val userStatistics: UserStatistics,
 ) : ViewModel() {
 
     private val _appInfo = MutableLiveData<List<AppInfoUi>>()
@@ -24,8 +23,8 @@ class AppInfoViewModel(
 
     fun updateUI() {
         val listRetrievedFromDevice = appInstalledRepository.getApplicationInfo()
-        val listRetrievedFromDatastore = sharedPrefRepository.read()
-        val list = listRetrievedFromDatastore as MutableList<AppInfoUi>
+        val listRetrievedFromDatastore = dataStoreRepository.read()
+        val list = listRetrievedFromDatastore.toMutableList()
 
         if (listRetrievedFromDatastore.isEmpty()) {
 
@@ -63,8 +62,8 @@ class AppInfoViewModel(
 
         if (listToTrack.isNotEmpty()) {
 
-            val usageStats = infoStatsManager.retrieveStats(
-                sharedPrefRepository.readInstallationMillisec(),
+            val usageStats = userStatistics.retrieveStats(
+                dataStoreRepository.readInstallationMillisec(),
                 System.currentTimeMillis()
             )
 
@@ -75,8 +74,8 @@ class AppInfoViewModel(
                     if (it.firstTimeStamp > 0) {
                         app.startDate = Date(it.firstTimeStamp)
                     }
-                    if (it.lastTimeUsed > 0) {
-                        app.endDate = Date(it.lastTimeUsed)
+                    if (it.lastTimeStamp > 0) {
+                        app.endDate = Date(it.lastTimeStamp)
                     }
                 }
             }
@@ -97,39 +96,19 @@ class AppInfoViewModel(
         _appInfo.value?.find { it.packageName == appInfoUI.packageName }?.toTrack =
             appInfoUI.toTrack
 
-        sharedPrefRepository.store(_appInfo.value as ArrayList)
+        dataStoreRepository.store(_appInfo.value as ArrayList)
     }
 
 
     fun storeAppInfo() {
         _appInfo.value?.let {
-            sharedPrefRepository.store(it)
+            dataStoreRepository.store(it)
         }
     }
 
     fun checkPermission() {
-        if (!infoStatsManager.hasPermission()) {
+        if (!userStatistics.hasPermission()) {
             _requestPermissionPermission.value = true
         }
-    }
-
-}
-
-class AppInfoViewModelFactory(
-    private val appInstalledRepository: InstalledAppInterface,
-    private val sharedPrefRepository: SharedPrefRepository,
-    private val infoStatsManager: InfoStatsManager
-) :
-    ViewModelProvider.Factory {
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(AppInfoViewModel::class.java)) {
-            @Suppress("UNCHECKED_CAST")
-            return AppInfoViewModel(
-                appInstalledRepository,
-                sharedPrefRepository,
-                infoStatsManager
-            ) as T
-        }
-        throw IllegalArgumentException("Unknown ViewModel class")
     }
 }
