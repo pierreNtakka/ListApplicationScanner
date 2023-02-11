@@ -1,7 +1,7 @@
 package com.ditta.apptracker.model
 
 import com.ditta.apptracker.appModule
-import com.ditta.apptracker.koinQualifierGson
+import com.ditta.apptracker.gsonKoinQualifierName
 import com.google.gson.Gson
 import org.junit.Assert.*
 import org.junit.Rule
@@ -12,7 +12,7 @@ import org.koin.test.inject
 
 class AppInfoUiUnitTest : KoinTest {
 
-    private val gson by inject<Gson>(qualifier = koinQualifierGson)
+    private val gson by inject<Gson>(qualifier = gsonKoinQualifierName)
 
     @get:Rule
     val koinTestRule = KoinTestRule.create {

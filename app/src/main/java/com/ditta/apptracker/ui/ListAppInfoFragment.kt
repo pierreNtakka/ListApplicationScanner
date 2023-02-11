@@ -13,7 +13,7 @@ import com.ditta.apptracker.databinding.ListAppInfoFragmentBinding
 import com.ditta.apptracker.ui.adapter.AppInfoAdapter
 import com.ditta.apptracker.ui.adapter.ItemListener
 import com.ditta.apptracker.utils.ViewUtils
-import com.ditta.apptracker.viewmodel.AppInfoViewModel
+import com.ditta.apptracker.ui.viewmodel.AppInfoViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ListAppInfoFragment : Fragment(), MenuProvider {

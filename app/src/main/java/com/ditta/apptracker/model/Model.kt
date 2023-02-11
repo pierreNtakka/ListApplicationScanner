@@ -5,8 +5,8 @@ import java.util.*
 
 class AppInfoUi(
     val packageName: String,
-    var toTrack: Boolean,
-    var isInstalled: Boolean? = true,
+    var toTrack: Boolean = false,
+    var isInstalled: Boolean = true,
     var startDate: Date? = null,
     var endDate: Date? = null
 ) {

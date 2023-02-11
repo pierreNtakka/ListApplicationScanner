@@ -1,18 +1,18 @@
-package com.ditta.apptracker.viewmodel
+package com.ditta.apptracker.ui.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.ditta.apptracker.datastore.DataStoreRepository
 import com.ditta.apptracker.datastore.InstalledAppRepository
-import com.ditta.apptracker.datastore.UserStatistics
+import com.ditta.apptracker.datastore.UserStatsRepository
 import com.ditta.apptracker.model.AppInfoUi
 import java.util.*
 
 class AppInfoViewModel(
     private val appInstalledRepository: InstalledAppRepository,
     private val dataStoreRepository: DataStoreRepository,
-    private val userStatistics: UserStatistics,
+    private val userStatistics: UserStatsRepository,
 ) : ViewModel() {
 
     private val _appInfo = MutableLiveData<List<AppInfoUi>>()
@@ -23,42 +23,36 @@ class AppInfoViewModel(
 
     fun updateUI() {
         val listRetrievedFromDevice = appInstalledRepository.getPackages()
-        val listRetrievedFromDatastore = dataStoreRepository.read()
-        val list = listRetrievedFromDatastore.toMutableList()
+        val listRetrievedFromDatastore = dataStoreRepository.read().toMutableList()
 
-        if (listRetrievedFromDatastore.isEmpty()) {
+        val difference = listRetrievedFromDatastore.filterNot { appInfo ->
 
-            listRetrievedFromDevice.forEach {
-                list.add(AppInfoUi(it, false))
+            val element = listRetrievedFromDevice.firstOrNull {
+                it == appInfo.packageName
             }
+            element != null
+        }
 
-        } else if (listRetrievedFromDatastore.size > listRetrievedFromDevice.size) {
-
-            list.forEach { appInfoUI ->
+        if (difference.isNotEmpty()) {
+            listRetrievedFromDatastore.map { appInfoUi ->
 
                 val element = listRetrievedFromDevice.firstOrNull {
-                    it == appInfoUI.packageName
+                    it == appInfoUi.packageName
                 }
 
                 if (element == null) {
-                    appInfoUI.isInstalled = false
-                    appInfoUI.toTrack = false
+                    appInfoUi.isInstalled = false
+                    appInfoUi.toTrack = false
                 }
             }
-
         } else {
-            listRetrievedFromDevice.forEach { appInfo ->
-                val element = listRetrievedFromDatastore.firstOrNull {
-                    it.packageName == appInfo
-                }
-
-                if (element == null) {
-                    list.add(AppInfoUi(appInfo, false))
-                }
+            listRetrievedFromDevice.forEach {
+                listRetrievedFromDatastore.add(AppInfoUi(packageName = it))
             }
         }
 
-        val listToTrack = list.filter { it.toTrack }
+
+        val listToTrack = listRetrievedFromDatastore.filter { it.toTrack }
 
         if (listToTrack.isNotEmpty()) {
 
@@ -82,7 +76,7 @@ class AppInfoViewModel(
 
         }
 
-        _appInfo.value = list
+        _appInfo.value = listRetrievedFromDatastore
     }
 
     fun clearAllSelection() {
@@ -96,13 +90,13 @@ class AppInfoViewModel(
         _appInfo.value?.find { it.packageName == appInfoUI.packageName }?.toTrack =
             appInfoUI.toTrack
 
-        dataStoreRepository.store(_appInfo.value as ArrayList)
+        dataStoreRepository.store(apps = _appInfo.value as ArrayList)
     }
 
 
     fun storeAppInfo() {
         _appInfo.value?.let {
-            dataStoreRepository.store(it)
+            dataStoreRepository.store(apps = it)
         }
     }
 

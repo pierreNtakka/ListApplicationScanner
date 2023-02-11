@@ -4,13 +4,8 @@ import android.app.Application
 import android.content.SharedPreferences
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
-import com.ditta.apptracker.datastore.DataStoreRepository
-import com.ditta.apptracker.datastore.DataStoreRepositoryImpl
-import com.ditta.apptracker.datastore.UserStatistics
-import com.ditta.apptracker.datastore.UserStatisticsImpl
-import com.ditta.apptracker.viewmodel.AppInfoViewModel
-import com.ditta.apptracker.datastore.InstalledAppRepositoryImpl
-import com.ditta.apptracker.datastore.InstalledAppRepository
+import com.ditta.apptracker.datastore.*
+import com.ditta.apptracker.ui.viewmodel.AppInfoViewModel
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -20,29 +15,31 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
-val koinQualifierGson = named("GSON")
+val gsonKoinQualifierName = named("GSON")
+val encryptedSharedPrefKoinQualifierName = named("ENCRYPTED_SHARED_PREF")
 
 val repositoryModule = module {
-    single<Gson>(koinQualifierGson) {
-        GsonBuilder()
-            .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-            .setDateFormat("dd-MM-yyyy HH:mm:ss")
-            .create()
+    single<Gson>(gsonKoinQualifierName) {
+        GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+            .setDateFormat("dd-MM-yyyy HH:mm:ss").create()
     }
 
-    single {
+    single(encryptedSharedPrefKoinQualifierName) {
         getSharedPrefs(androidApplication())
     }
 
     single<DataStoreRepository> {
-        DataStoreRepositoryImpl(get(), get(qualifier = koinQualifierGson))
+        DataStoreRepositoryImpl(
+            get(qualifier = encryptedSharedPrefKoinQualifierName),
+            get(qualifier = gsonKoinQualifierName)
+        )
     }
 
     single<InstalledAppRepository> {
         InstalledAppRepositoryImpl(androidApplication())
     }
 
-    single<UserStatistics> {
+    single<UserStatsRepository> {
         UserStatisticsImpl(androidContext())
     }
 }

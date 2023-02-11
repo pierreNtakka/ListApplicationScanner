@@ -16,9 +16,9 @@ class DataStoreRepositoryImpl(
         private const val APP_INSTALLATION_MILLISEC = "APP_INSTALLATION_MILLISEC"
     }
 
-    override fun store(list: List<AppInfoUi>) {
+    override fun store(apps: List<AppInfoUi>) {
         sharedPreferences.edit()
-            .putString(INSTALLED_APP_KEY, gson.toJson(list))
+            .putString(INSTALLED_APP_KEY, gson.toJson(apps))
             .apply()
     }
 

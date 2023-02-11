@@ -5,7 +5,7 @@ import android.content.Context
 import com.ditta.apptracker.model.UserStatsDataModel
 import java.util.*
 
-class UserStatisticsImpl(context: Context) : UserStatistics {
+class UserStatisticsImpl(context: Context) : UserStatsRepository {
 
     private val mUsageStatsManager: UsageStatsManager = context
         .getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
